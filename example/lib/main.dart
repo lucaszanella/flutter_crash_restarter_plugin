@@ -13,11 +13,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-
+  int _secondsToCrash = 30;
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    //initPlatformState();
+    doSomething();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -40,15 +41,29 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void decrease() async {
+    if (_secondsToCrash==0) {
+      Flutterplugincrashrestarter.crash();
+    }
+    setState(() {
+      _secondsToCrash -= 1;
+    });
+  }
+
+  void doSomething() async {
+    decrease();
+    var timer = Timer(Duration(seconds: 1), () => doSomething());
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Flutter Crash Restarter Example'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Text('Seconds to crash: $_secondsToCrash\n'),
         ),
       ),
     );

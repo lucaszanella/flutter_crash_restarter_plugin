@@ -61,6 +61,7 @@ public class FlutterExceptionHandler<A> implements Thread.UncaughtExceptionHandl
     //Simulates a crash
     public static void crashMe() {
         Log.d(TAG, "gonna crash");
+
         throw new NullPointerException();
     }
 }

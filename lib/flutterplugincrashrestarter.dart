@@ -10,4 +10,8 @@ class Flutterplugincrashrestarter {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
+
+  static void crash() async {
+    await _channel.invokeMethod('crash');
+  }
 }
