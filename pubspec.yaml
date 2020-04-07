@@ -1,8 +1,7 @@
 name: flutterplugincrashrestarter
 description: A flutter plugin that restarts your Android app after a crash and provides you with the stack trace
-version: 0.0.1
-author:
-homepage:
+version: 0.0.3
+homepage: https://lucaszanella.com
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
