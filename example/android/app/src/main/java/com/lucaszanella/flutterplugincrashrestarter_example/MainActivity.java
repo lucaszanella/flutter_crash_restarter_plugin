@@ -12,37 +12,14 @@ import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
-    private static String TAG = "MainActivity";
-    Thread thread;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        thread = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    TimeUnit.SECONDS.sleep(60);
-                    //crashMe();
-                } catch (Exception exception) {
-
-                }
-            }
-        });
-        thread.start();
+        new com.lucaszanella.flutterplugincrashrestarter.FlutterExceptionHandler(MainActivity.class, this);
     }
 
-    public void crashMe() {
-        Log.d(TAG, "gonna crash");
-        runOnUiThread(new Runnable() {
-            public void run() {
-                throw new NullPointerException();
-            }
-        });
-
+    @Override
+    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
+        GeneratedPluginRegistrant.registerWith(flutterEngine);
     }
-  @Override
-  public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
-      new com.lucaszanella.flutterplugincrashrestarter.FlutterExceptionHandler(MainActivity.class, this);
-      GeneratedPluginRegistrant.registerWith(flutterEngine);
-  }
 }

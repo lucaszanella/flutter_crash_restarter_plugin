@@ -63,11 +63,11 @@ public class FlutterExceptionHandler<A> implements Thread.UncaughtExceptionHandl
 
     //Simulates a crash
     public static void crashMe() {
-        Log.d(TAG, "gonna crash");
-        throw new NullPointerException();
-    }
-
-    public static void crashMe2() {
+        /*
+            Crash must happen outside the thread that calls crashMe() because
+            Flutter has a default exception handler for method channels:
+            https://github.com/flutter/engine/blob/025e2d82dda54af7f33a0d511bde47ec835593b1/shell/platform/android/io/flutter/plugin/common/MethodChannel.java#L224
+         */
         thread = new Thread(new Runnable() {
             public void run() {
                 throw new NullPointerException();
