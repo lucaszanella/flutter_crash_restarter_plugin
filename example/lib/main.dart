@@ -13,33 +13,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   int _secondsToCrash = 30;
+  String _cause = "";
+  String _stackTrace = "";
+  String _message = "";
+  bool _didCrash = false;
   @override
   void initState() {
     super.initState();
-    //initPlatformState();
-    doSomething();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await Flutterplugincrashrestarter.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
+    getStackTrace();
+    countdown();
   }
 
   void decrease() async {
@@ -51,11 +34,25 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void doSomething() async {
+  void countdown() async {
     decrease();
-    var timer = Timer(Duration(seconds: 1), () => doSomething());
+    var timer = Timer(Duration(seconds: 1), () => countdown());
   }
 
+  void getStackTrace() async {
+    dynamic x = await Flutterplugincrashrestarter.getStackTrace();
+    if (x==false) {
+      //Did not recover from a crash
+    } else if(x is Map) {
+      print("stack trace received");
+      setState(() {
+        _cause = x["cause"];
+        _message = x["message"];
+        _stackTrace = x["stackTrace"];
+        _didCrash = x["didCrash"];
+      });
+    }
+  }
 
 
   @override
@@ -65,20 +62,21 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Flutter Crash Restarter Example'),
         ),
-        body: Center(
-          child: Text('Seconds to crash: $_secondsToCrash\n'),
+        body: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            Text('Seconds to crash: $_secondsToCrash\n'),
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: (_didCrash) ?
+                <Widget>[Text('Cause: $_cause\n'),
+                         Text('Message: $_message\n'),
+                         Text('StackTrace: $_stackTrace\n')] :
+                <Widget>[])
+          ],
+          )
         ),
-      ),
-    );
-  }
-}
-
-class MyApp2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: WebView(
-        initialUrl : 'https://www.google.com/',
       ),
     );
   }

@@ -16,9 +16,9 @@ public class FlutterExceptionHandler<A> implements Thread.UncaughtExceptionHandl
     private Class<A> type;
     private Activity activity;
     static Thread thread;
-    static String message;
-    static String cause;
-    static String stackTrace;
+    static String message = "";
+    static String cause = "";
+    static String stackTrace = "";
     static boolean hasStackTrace;
     public FlutterExceptionHandler(Class<A> type, Activity a) {
         this.activity = a;
@@ -33,20 +33,13 @@ public class FlutterExceptionHandler<A> implements Thread.UncaughtExceptionHandl
             cause = cause_;
             stackTrace = stackTrace_;
             hasStackTrace = true;
-            /*
+
             Log.d(TAG, "App restarted after crash");
             Log.d(TAG, "message: " + message);
             Log.d(TAG, "cause: " + cause);
             Log.d(TAG, "stackTrace: " + stackTrace);
-
-            Toast.makeText(activity, "message: " + message, Toast.LENGTH_SHORT).show();
-            Toast.makeText(activity, "cause: " + cause, Toast.LENGTH_SHORT).show();
-            Toast.makeText(activity, "stackTrace: " + stackTrace, Toast.LENGTH_SHORT).show();
-            */
         }
     }
-
-
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {

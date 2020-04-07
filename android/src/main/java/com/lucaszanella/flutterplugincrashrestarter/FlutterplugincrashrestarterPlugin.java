@@ -1,6 +1,10 @@
 package com.lucaszanella.flutterplugincrashrestarter;
 
 import androidx.annotation.NonNull;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -10,7 +14,6 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /** FlutterplugincrashrestarterPlugin */
 public class FlutterplugincrashrestarterPlugin implements FlutterPlugin, MethodCallHandler {
-  boolean calledFlutterWithStackTrace = false;
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutterplugincrashrestarter");
@@ -35,14 +38,18 @@ public class FlutterplugincrashrestarterPlugin implements FlutterPlugin, MethodC
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     if (call.method.equals("crash")) {
       FlutterExceptionHandler.crashMe();
-      result.success(true);
     } else if (call.method.equals("getStackTrace")) {
-      if (!calledFlutterWithStackTrace) {
         if (FlutterExceptionHandler.hasStackTrace) {
-          //call here
-          calledFlutterWithStackTrace = true;
+          Map<String, Object> resultMap = new HashMap<String, Object>();
+          resultMap.put("message", FlutterExceptionHandler.message);
+          resultMap.put("cause", FlutterExceptionHandler.cause);
+          resultMap.put("stackTrace", FlutterExceptionHandler.stackTrace);
+          resultMap.put("didCrash", true);
+          result.success(resultMap);
+        } else {
+          result.success(false);
         }
-      }
+
     } else {
       result.notImplemented();
     }

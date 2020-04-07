@@ -14,4 +14,8 @@ class Flutterplugincrashrestarter {
   static void crash() async {
     await _channel.invokeMethod('crash');
   }
+
+  static Future<dynamic> getStackTrace() async {
+    return await _channel.invokeMethod('getStackTrace');
+  }
 }
