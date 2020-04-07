@@ -36,8 +36,8 @@ public class FlutterplugincrashrestarterPlugin implements FlutterPlugin, MethodC
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else if (call.method.equals("crash")) {
       //https://github.com/flutter/engine/blob/025e2d82dda54af7f33a0d511bde47ec835593b1/shell/platform/android/io/flutter/plugin/common/MethodChannel.java#L224
-      FlutterExceptionHandler.crashMe();
-      result.success("");
+      FlutterExceptionHandler.crashMe2();
+      result.success(true);
     } else {
       result.notImplemented();
     }

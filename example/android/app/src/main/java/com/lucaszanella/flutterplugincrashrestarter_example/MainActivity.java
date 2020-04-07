@@ -22,7 +22,7 @@ public class MainActivity extends FlutterActivity {
             public void run() {
                 try {
                     TimeUnit.SECONDS.sleep(60);
-                    crashMe();
+                    //crashMe();
                 } catch (Exception exception) {
 
                 }

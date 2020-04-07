@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutterplugincrashrestarter/flutterplugincrashrestarter.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -55,6 +56,8 @@ class _MyAppState extends State<MyApp> {
     var timer = Timer(Duration(seconds: 1), () => doSomething());
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,6 +68,17 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: Text('Seconds to crash: $_secondsToCrash\n'),
         ),
+      ),
+    );
+  }
+}
+
+class MyApp2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: WebView(
+        initialUrl : 'https://www.google.com/',
       ),
     );
   }

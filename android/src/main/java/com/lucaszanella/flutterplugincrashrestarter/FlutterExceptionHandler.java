@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class FlutterExceptionHandler<A> implements Thread.UncaughtExceptionHandler {
     private static String TAG = "FlutterExceptionHandler";
     private Class<A> type;
     private Activity activity;
+    static Thread thread;
     public FlutterExceptionHandler(Class<A> type, Activity a) {
         this.activity = a;
         this.type = type;
@@ -61,7 +64,15 @@ public class FlutterExceptionHandler<A> implements Thread.UncaughtExceptionHandl
     //Simulates a crash
     public static void crashMe() {
         Log.d(TAG, "gonna crash");
-
         throw new NullPointerException();
+    }
+
+    public static void crashMe2() {
+        thread = new Thread(new Runnable() {
+            public void run() {
+                throw new NullPointerException();
+            }
+        });
+        thread.start();
     }
 }
