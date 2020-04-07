@@ -10,6 +10,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /** FlutterplugincrashrestarterPlugin */
 public class FlutterplugincrashrestarterPlugin implements FlutterPlugin, MethodCallHandler {
+  boolean calledFlutterWithStackTrace = false;
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     final MethodChannel channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutterplugincrashrestarter");
@@ -35,6 +36,13 @@ public class FlutterplugincrashrestarterPlugin implements FlutterPlugin, MethodC
     if (call.method.equals("crash")) {
       FlutterExceptionHandler.crashMe();
       result.success(true);
+    } else if (call.method.equals("getStackTrace")) {
+      if (!calledFlutterWithStackTrace) {
+        if (FlutterExceptionHandler.hasStackTrace) {
+          //call here
+          calledFlutterWithStackTrace = true;
+        }
+      }
     } else {
       result.notImplemented();
     }
